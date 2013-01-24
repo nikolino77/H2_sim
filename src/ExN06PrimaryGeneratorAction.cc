@@ -88,7 +88,7 @@ void ExN06PrimaryGeneratorAction::GeneratePrimaries(G4Event* anEvent)
 	CreateTree::Instance()->InitialPositionY = InitPos[1];		
 	CreateTree::Instance()->InitialPositionZ = InitPos[2];	
 	
-	cout << " position x = " << InitPos[0] << endl;
+	//cout << " position x = " << InitPos[0] << endl;
 	
 // 	CreateTree::Instance()->Fill();
 

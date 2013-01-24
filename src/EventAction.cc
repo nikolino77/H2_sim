@@ -58,7 +58,7 @@ void EventAction::BeginOfEventAction(const G4Event* evt)
 	
 	
 //  	total_energy4 = 0;
-	cout << "event :: " << evt->GetEventID() << endl;
+	//cout << "event :: " << evt->GetEventID() << endl;
 	
 }
 

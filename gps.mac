@@ -3,7 +3,7 @@
 
 #
 #
-/gps/energy 80 GeV
+/gps/energy 500 GeV
 /gps/particle e-
 #/gps/particle gamma
 
