@@ -1,0 +1,81 @@
+#include "CreateTree.hh"
+
+CreateTree* CreateTree::fInstance = NULL;
+
+using namespace std;
+
+CreateTree::CreateTree(TString name,Bool_t hits,Bool_t absorptions)
+{
+	if(fInstance) 
+	{
+    		return;
+  	}
+
+  	this->HITS=hits;
+  	this->ABSORPTIONS=absorptions;
+
+  	this->fInstance = this;
+  	this->fname = name;
+  	this->ftree = new TTree("tree","name");
+ 
+  	this->GetTree()->Branch("Run",&this->Run,"Run/I");
+  	this->GetTree()->Branch("Event",&this->Event,"Event/I");
+
+	this->GetTree()->Branch("InitialPositionX",&this->InitialPositionX,"InitialPositionX/F");
+	this->GetTree()->Branch("InitialPositionY",&this->InitialPositionY,"InitialPositionY/F");
+	this->GetTree()->Branch("InitialPositionZ",&this->InitialPositionZ,"InitialPositionZ/F");
+
+	this->GetTree()->Branch("depositionCounter",&this->depositionCounter,"depositionCounter/I");
+	this->GetTree()->Branch("depositionX",&this->depositionX);
+	this->GetTree()->Branch("depositionY",&this->depositionY);
+	this->GetTree()->Branch("depositionZ",&this->depositionZ);
+	  
+	this->GetTree()->Branch("Total_energy",&this->Total_energy,"Total_energy[9]/F");
+	
+	this->GetTree()->Branch("Total_energy_absorber",&this->Total_energy_absorber,"Total_energy_absorber/F");
+	this->GetTree()->Branch("Total_energy_world",&this->Total_energy_world,"Total_energy_world/F");
+
+  	this->Clear();
+}
+
+CreateTree::~CreateTree()
+{
+
+}
+
+Bool_t CreateTree::Write()
+{
+  	TString filename = this->GetName();
+  	filename+=".root";
+  	TFile* file = new TFile(filename,"RECREATE");
+  	this->GetTree()->Write();
+  	file->Write();
+  	file->Close();
+  	return true;
+}
+
+void CreateTree::Clear()
+{
+  	Run			= 0;
+  	Event			= 0;
+  	Process			= 0;
+
+	depositionCounter	= 0;
+	
+	for (int iF = 0; iF < 9; iF++) 
+	{
+	  Total_energy[iF] = 0;  
+	}
+	
+	Total_energy_absorber	= 0;
+	Total_energy_world	= 0;
+	
+	InitialPositionX 	= 0;
+	InitialPositionY 	= 0;
+	InitialPositionZ 	= 0;
+	
+	depositionX.clear();		
+	depositionY.clear();		
+	depositionZ.clear();
+
+}
