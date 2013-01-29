@@ -35,8 +35,6 @@ void myThread(int number, string name)
 	command = "$G4WORKDIR/bin/Linux-g++/H2_sim " + rootFile;
 	cout << command << endl;
 	system(command.c_str());
-
-	cout << "done " << boost::this_thread::get_id() << endl;
 };
 
 
