@@ -52,39 +52,17 @@ ExN06StackingAction::~ExN06StackingAction()
 G4ClassificationOfNewTrack
 ExN06StackingAction::ClassifyNewTrack(const G4Track * aTrack)
 {
-  
-  /*
-    if(aTrack->GetDefinition() == G4OpticalPhoton::OpticalPhotonDefinition())
-  { // particle is optical photon
-    if(aTrack->GetParentID()>0)
-    { // particle is secondary
-      photonCounter++;
-    }
-}
-  
-  
-    if(aTrack->GetDefinition() == G4OpticalPhoton::OpticalPhotonDefinition())
-  { // particle is optical photon
-    if(aTrack->GetParentID()>0)
-    { // particle is secondary
-      electronCounter++;
-    }
-  }*/
-  
-  
   return fUrgent;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void ExN06StackingAction::NewStage()
-{
-}
+{}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void ExN06StackingAction::PrepareNewEvent()
-{
-}
+{}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

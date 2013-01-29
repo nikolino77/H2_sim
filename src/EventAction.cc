@@ -24,7 +24,6 @@
 
 EventAction::EventAction()
 {
-	mppcCollID = -1;
 }
  
 EventAction::~EventAction()
@@ -33,40 +32,33 @@ EventAction::~EventAction()
 
 void EventAction::BeginOfEventAction(const G4Event* evt)
 {
-  	G4int evtNb = evt->GetEventID();
-  	if(evtNb%100 == 0 && evtNb!=0 ) 
-	{
-    		G4cout << "---> Begin of Event: " << evtNb << G4endl;
-  	}
+  G4int evtNb = evt->GetEventID();
+  if(evtNb%10 == 0 && evtNb!=0 ) 
+  {
+    cout << "---> Begin of Event: " << evtNb << endl;
+  }
 
-//   	G4SDManager * SDman = G4SDManager::GetSDMpointer();
-//   	if(mppcCollID<0) 
-// 	{ 
-//       		mppcCollID=SDman->GetCollectionID("mppcHitCollection");
-//    	}
-   	
-//    	G4ThreeVector InitPos[3];
+  // --------------------- STORE PRIMARY VERTEX ----------------------------- //
+  G4ThreeVector InitPos = evt -> GetPrimaryVertex() -> GetPosition();
+  G4ThreeVector InitDir = evt -> GetPrimaryVertex() -> GetPrimary() -> GetMomentumDirection();
 
-  	// -------------------- INSTANCE RUN/EVENT IN TREE ---------------------- //
-  	Int_t run = CreateTree::Instance() -> Run;
-
-  	CreateTree::Instance()->Clear();
-  	CreateTree::Instance()->Run = run;
-  	CreateTree::Instance()->Event = evt->GetEventID();
+  CreateTree::Instance()->InitialPositionX = InitPos[0];		
+  CreateTree::Instance()->InitialPositionY = InitPos[1];		
+  CreateTree::Instance()->InitialPositionZ = InitPos[2];	
 	
-	
-	
-	
-//  	total_energy4 = 0;
-	//cout << "event :: " << evt->GetEventID() << endl;
-	
+  CreateTree::Instance()->InitalMomentumDirectionX = InitDir[0];		
+  CreateTree::Instance()->InitalMomentumDirectionY = InitDir[1];		
+  CreateTree::Instance()->InitalMomentumDirectionZ = InitDir[2];	
+  
+  // -------------------- INSTANCE RUN/EVENT IN TREE ---------------------- //
+  Int_t run = CreateTree::Instance() -> Run;
+  CreateTree::Instance()->Clear();
+  CreateTree::Instance()->Run = run;
+  CreateTree::Instance()->Event = evt->GetEventID();
 }
 
 void EventAction::EndOfEventAction(const G4Event* evt)
 {
-
-//   cout << "total_energy4 = " << total_energy4 << endl;
   CreateTree::Instance()->Fill();
-
 }
 

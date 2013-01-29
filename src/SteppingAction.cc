@@ -48,16 +48,16 @@ void SteppingAction::UserSteppingAction(const G4Step * theStep)
 
   if (energy > 0)
   {	  
-    Int_t counter = CreateTree::Instance()->depositionCounter;
-    CreateTree::Instance()->depositionCounter++;
+    Int_t counter = CreateTree::Instance() -> depositionCounter;
+    CreateTree::Instance() -> depositionCounter++;
 
     G4ThreeVector pos = thePostPoint->GetPosition();
 		
     // cout << " position = " << pos[0]  << endl;
 		
-    CreateTree::Instance()->depositionX.push_back(pos[0]);		
-    CreateTree::Instance()->depositionY.push_back(pos[1]);
-    CreateTree::Instance()->depositionZ.push_back(pos[2]);
+    CreateTree::Instance() -> depositionX.push_back(pos[0]);		
+    CreateTree::Instance() -> depositionY.push_back(pos[1]);
+    CreateTree::Instance() -> depositionZ.push_back(pos[2]);
 		
     // cout << " energy deposited in this step: " << energy << endl;
 
@@ -65,14 +65,15 @@ void SteppingAction::UserSteppingAction(const G4Step * theStep)
     // cout << "energy =  " << energy << endl;
     // cout << "energy*MeV =  " << energy*GeV << endl;
 		
-    char name [60];
+    //char name [60];
 		
-    for (int iF = 0; iF < 9; iF ++) 
+    for (int iF = 1; iF < 10; iF ++) 
     {
-      sprintf (name, "Fiber_%d" , iF);
-      if (thePrePV->GetName() == name)
+      //sprintf (name, "Fiber_%d" , iF);
+      if (atoi(thePrePV->GetName()) == iF)
       {
-        CreateTree::Instance()->Total_energy[iF] += energy;  
+	CreateTree::Instance()->Total_energy[iF] += energy;  
+	break;
 	// if (thePrePV->GetName() == "Fiber_0") cout << " fiber 4 small contribution = " << energy << endl;
       }	
     }

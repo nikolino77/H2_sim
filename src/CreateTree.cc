@@ -1,4 +1,5 @@
 #include "CreateTree.hh"
+#include <vector>
 
 CreateTree* CreateTree::fInstance = NULL;
 
@@ -24,6 +25,10 @@ CreateTree::CreateTree(TString name,Bool_t hits,Bool_t absorptions)
 	this->GetTree()->Branch("InitialPositionX",&this->InitialPositionX,"InitialPositionX/F");
 	this->GetTree()->Branch("InitialPositionY",&this->InitialPositionY,"InitialPositionY/F");
 	this->GetTree()->Branch("InitialPositionZ",&this->InitialPositionZ,"InitialPositionZ/F");
+	
+	this->GetTree()->Branch("InitalMomentumDirectionX",&this->InitalMomentumDirectionX,"InitalMomentumDirectionX/F");
+	this->GetTree()->Branch("InitalMomentumDirectionY",&this->InitalMomentumDirectionY,"InitalMomentumDirectionY/F");
+	this->GetTree()->Branch("InitalMomentumDirectionZ",&this->InitalMomentumDirectionZ,"InitalMomentumDirectionZ/F");
 
 	this->GetTree()->Branch("depositionCounter",&this->depositionCounter,"depositionCounter/I");
 	this->GetTree()->Branch("depositionX",&this->depositionX);
@@ -72,6 +77,10 @@ void CreateTree::Clear()
 	InitialPositionX 	= 0;
 	InitialPositionY 	= 0;
 	InitialPositionZ 	= 0;
+	
+	InitalMomentumDirectionX = 0;
+	InitalMomentumDirectionY = 0;
+	InitalMomentumDirectionZ = 0;
 	
 	depositionX.clear();		
 	depositionY.clear();		

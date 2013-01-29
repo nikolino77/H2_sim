@@ -45,6 +45,10 @@ class CreateTree
   Float_t InitialPositionX;
   Float_t InitialPositionY;
   Float_t InitialPositionZ;
+  
+  Float_t InitalMomentumDirectionX;
+  Float_t InitalMomentumDirectionY;
+  Float_t InitalMomentumDirectionZ;
 
   Int_t		depositionCounter;
   vector<float> depositionX;

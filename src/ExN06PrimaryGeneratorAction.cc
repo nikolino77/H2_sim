@@ -78,19 +78,7 @@ ExN06PrimaryGeneratorAction::~ExN06PrimaryGeneratorAction()
 
 void ExN06PrimaryGeneratorAction::GeneratePrimaries(G4Event* anEvent)
 {
-//   particleGun->GeneratePrimaryVertex(anEvent);
-    gun->GeneratePrimaryVertex(anEvent);
-    
-    /// store primary particle position
-    	G4ThreeVector InitPos = gun->GetParticlePosition();
-	
-	CreateTree::Instance()->InitialPositionX = InitPos[0];		
-	CreateTree::Instance()->InitialPositionY = InitPos[1];		
-	CreateTree::Instance()->InitialPositionZ = InitPos[2];	
-	
-	//cout << " position x = " << InitPos[0] << endl;
-	
-// 	CreateTree::Instance()->Fill();
-
+  //particleGun->GeneratePrimaryVertex(anEvent);
+  gun->GeneratePrimaryVertex(anEvent);
 }
 

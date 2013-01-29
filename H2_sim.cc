@@ -42,8 +42,21 @@
 //     
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
+#include <time.h>
+#include <string>
+#include <sys/types.h>
+#include <unistd.h>
+#include <stdio.h>
+#include <stdlib.h>
+#include <sys/resource.h>
+#include <vector>
+
 #include "G4RunManager.hh"
 #include "G4UImanager.hh"
+#include "G4UIterminal.hh"
+#include "G4UItcsh.hh"
+
+#include "G4ios.hh"
 
 #include "ExN06PhysicsList.hh"
 #include "ExN06PrimaryGeneratorAction.hh"
@@ -68,6 +81,8 @@
 #include "G4UIExecutive.hh"
 #endif
 
+#include "TCint.h"
+
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 long int CreateSeed();
@@ -76,6 +91,11 @@ long int CreateSeed();
 
 int main(int argc,char** argv)
 {
+  
+  #pragma link off all classes;
+  #pragma link C++ class std::vector<float>;
+  gInterpreter->GenerateDictionary("vector<float>","vector");
+  
   // Seed the random number generator manually
   //
   G4long myseed = CreateSeed();
@@ -121,7 +141,7 @@ int main(int argc,char** argv)
   
   //
   G4UserStackingAction* stacking_action = new ExN06StackingAction;
-//   runManager->SetUserAction(stacking_action);
+  runManager->SetUserAction(stacking_action);
   
   //
   SteppingAction* stepping_action = new SteppingAction;
@@ -140,7 +160,7 @@ int main(int argc,char** argv)
 #ifdef G4UI_USE
       G4UIExecutive * ui = new G4UIExecutive(argc,argv);
 #ifdef G4VIS_USE
-             UImanager->ApplyCommand("/control/execute vis.mac");     
+            // UImanager->ApplyCommand("/control/execute vis.mac");     
 		UImanager->ApplyCommand("/control/execute gps.mac");    
 #endif
       ui->SessionStart();
