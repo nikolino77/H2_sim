@@ -18,7 +18,7 @@ class CreateTree
 
   public:
 
-  CreateTree(TString name,Bool_t hits,Bool_t absorptions);
+  CreateTree(TString name);
   ~CreateTree();
 
   TTree*              GetTree() const { return ftree; };

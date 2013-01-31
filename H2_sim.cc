@@ -101,7 +101,7 @@ int main(int argc,char** argv)
   G4long myseed = CreateSeed();
   CLHEP::HepRandom::setTheSeed(myseed);
   
-  CreateTree* mytree = new CreateTree("H2_sim",0,0);
+  CreateTree* mytree = new CreateTree("H2_sim");
 
   // User Verbose output class
   //
