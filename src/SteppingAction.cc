@@ -72,7 +72,7 @@ void SteppingAction::UserSteppingAction(const G4Step * theStep)
       //sprintf (name, "Fiber_%d" , iF);
       if (atoi(thePrePV->GetName()) == iF)
       {
-	CreateTree::Instance()->Total_energy[iF] += energy;  
+	CreateTree::Instance()->Total_energy[iF-1] += energy;  
 	break;
 	// if (thePrePV->GetName() == "Fiber_0") cout << " fiber 4 small contribution = " << energy << endl;
       }	

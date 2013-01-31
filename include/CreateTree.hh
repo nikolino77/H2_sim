@@ -16,12 +16,6 @@ class CreateTree
   TTree*              ftree;
   TString             fname;
 
-  Bool_t              HITS;
-  Bool_t              ABSORPTIONS;
-
-  static const Int_t  MaxNum = 200000;
-  static const Int_t  MaxNumPro = 1000000;
-
   public:
 
   CreateTree(TString name,Bool_t hits,Bool_t absorptions);
@@ -35,9 +29,6 @@ class CreateTree
   static CreateTree*  Instance() { return fInstance; };
   static CreateTree*  fInstance;
 
-  Bool_t              Hits() const { return this->HITS; };
-  Bool_t              Absorptions() const { return this->ABSORPTIONS; };
-
   Int_t               Run;
   Int_t               Event;
 
@@ -50,7 +41,7 @@ class CreateTree
   Float_t InitalMomentumDirectionY;
   Float_t InitalMomentumDirectionZ;
 
-  Int_t		depositionCounter;
+  Int_t		 depositionCounter;
   vector<float> depositionX;
   vector<float> depositionY;
   vector<float> depositionZ;

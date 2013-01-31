@@ -5,15 +5,12 @@ CreateTree* CreateTree::fInstance = NULL;
 
 using namespace std;
 
-CreateTree::CreateTree(TString name,Bool_t hits,Bool_t absorptions)
+CreateTree::CreateTree(TString name)
 {
 	if(fInstance) 
 	{
     		return;
   	}
-
-  	this->HITS=hits;
-  	this->ABSORPTIONS=absorptions;
 
   	this->fInstance = this;
   	this->fname = name;
