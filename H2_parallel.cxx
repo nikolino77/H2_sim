@@ -50,7 +50,7 @@ int main(int argc, char** argv)
 {
 
     int n_cpu          = atoi(argv[1]);
-    int n_processi     = atoi(argv[2])
+    int n_processi     = atoi(argv[2]);
     string filename    = argv[3];
     Bool_t energy_data = 1;
     Bool_t init_data   = 1;
