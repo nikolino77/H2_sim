@@ -38,23 +38,26 @@ void EventAction::BeginOfEventAction(const G4Event* evt)
     cout << "---> Begin of Event: " << evtNb << endl;
   }
 
-  // --------------------- STORE PRIMARY VERTEX ----------------------------- //
-  G4ThreeVector InitPos = evt -> GetPrimaryVertex() -> GetPosition();
-  G4ThreeVector InitDir = evt -> GetPrimaryVertex() -> GetPrimary() -> GetMomentumDirection();
-
-  CreateTree::Instance()->InitialPositionX = InitPos[0];		
-  CreateTree::Instance()->InitialPositionY = InitPos[1];		
-  CreateTree::Instance()->InitialPositionZ = InitPos[2];	
-	
-  CreateTree::Instance()->InitalMomentumDirectionX = InitDir[0];		
-  CreateTree::Instance()->InitalMomentumDirectionY = InitDir[1];		
-  CreateTree::Instance()->InitalMomentumDirectionZ = InitDir[2];	
+  CreateTree::Instance() -> Clear();
   
+  // --------------------- STORE PRIMARY VERTEX ----------------------------- //
+  
+  if(CreateTree::Instance() -> Init_data())
+  {
+    G4ThreeVector InitPos = evt -> GetPrimaryVertex() -> GetPosition();
+    G4ThreeVector InitDir = evt -> GetPrimaryVertex() -> GetPrimary() -> GetMomentumDirection();
+
+    CreateTree::Instance() -> InitialPositionX = InitPos[0];		
+    CreateTree::Instance() -> InitialPositionY = InitPos[1];		
+    CreateTree::Instance() -> InitialPositionZ = InitPos[2];
+  	
+    CreateTree::Instance() -> InitalMomentumDirectionX = InitDir[0];		
+    CreateTree::Instance() -> InitalMomentumDirectionY = InitDir[1];		
+    CreateTree::Instance() -> InitalMomentumDirectionZ = InitDir[2];	
+  }
+    
   // -------------------- INSTANCE RUN/EVENT IN TREE ---------------------- //
-  Int_t run = CreateTree::Instance() -> Run;
-  CreateTree::Instance()->Clear();
-  CreateTree::Instance()->Run = run;
-  CreateTree::Instance()->Event = evt->GetEventID();
+  CreateTree::Instance() -> Event = evt -> GetEventID();
 }
 
 void EventAction::EndOfEventAction(const G4Event* evt)

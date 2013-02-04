@@ -15,10 +15,13 @@ class CreateTree
 
   TTree*              ftree;
   TString             fname;
-
+  Bool_t	       ENERGY_FIBER;
+  Bool_t	       INIT_DATA; 
+  Bool_t	       POS_FIBER;
+  
   public:
 
-  CreateTree(TString name);
+  CreateTree(TString name, Bool_t energy_fiber, Bool_t init_data, Bool_t pos_fiber);
   ~CreateTree();
 
   TTree*              GetTree() const { return ftree; };
@@ -28,11 +31,13 @@ class CreateTree
   void                Clear();
   static CreateTree*  Instance() { return fInstance; };
   static CreateTree*  fInstance;
-
-  Int_t               Run;
+  
+  Bool_t	       Energy_fiber() const { return this -> ENERGY_FIBER; };
+  Bool_t	       Init_data()    const { return this -> INIT_DATA;    };
+  Bool_t	       Pos_fiber()    const { return this -> POS_FIBER;    };
+  
   Int_t               Event;
 
-  
   Float_t InitialPositionX;
   Float_t InitialPositionY;
   Float_t InitialPositionZ;
@@ -41,13 +46,13 @@ class CreateTree
   Float_t InitalMomentumDirectionY;
   Float_t InitalMomentumDirectionZ;
 
-  Int_t		 depositionCounter;
-  vector<float> depositionX;
-  vector<float> depositionY;
-  vector<float> depositionZ;
+  vector<Float_t> Energy_deposited;
+  vector<Float_t> depositionX;
+  vector<Float_t> depositionY;
+  vector<Float_t> depositionZ;
   
   Float_t Total_energy[9];
-  
+
   Float_t Total_energy_absorber;
   Float_t Total_energy_world;
   

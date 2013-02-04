@@ -92,8 +92,6 @@ long int CreateSeed();
 int main(int argc,char** argv)
 {
   
-  #pragma link off all classes;
-  #pragma link C++ class std::vector<float>;
   gInterpreter->GenerateDictionary("vector<float>","vector");
   
   // Seed the random number generator manually
@@ -101,7 +99,19 @@ int main(int argc,char** argv)
   G4long myseed = CreateSeed();
   CLHEP::HepRandom::setTheSeed(myseed);
   
-  CreateTree* mytree = new CreateTree("H2_sim");
+  string name		= argv[1];
+  Bool_t energy_data 	= 1;
+  Bool_t init_data 	= 1;
+  Bool_t pos_fiber 	= 0;
+  
+  if(argc == 5)
+  {
+    energy_data = atoi(argv[2]);
+    init_data   = atoi(argv[3]);
+    pos_fiber   = atoi(argv[4]);
+  }
+    
+  CreateTree* mytree = new CreateTree("H2_sim", energy_data, init_data, pos_fiber);
 
   // User Verbose output class
   //
@@ -122,27 +132,17 @@ int main(int argc,char** argv)
   //
   G4VUserDetectorConstruction* detector = new ExN06DetectorConstruction;
   runManager-> SetUserInitialization(detector);
-  
-#ifdef G4VIS_USE
-  // visualization manager
-  //
-  G4VisManager* visManager = new G4VisExecutive;
-  visManager->Initialize();
-#endif
 
   // UserAction classes
   //
   G4UserRunAction* run_action = new ExN06RunAction;
-  runManager->SetUserAction(run_action);
-  
+  runManager->SetUserAction(run_action);  
   //
   G4UserEventAction* event_action = new EventAction;
   runManager->SetUserAction(event_action);
-  
   //
   G4UserStackingAction* stacking_action = new ExN06StackingAction;
   runManager->SetUserAction(stacking_action);
-  
   //
   SteppingAction* stepping_action = new SteppingAction;
   runManager->SetUserAction(stepping_action);
@@ -150,50 +150,35 @@ int main(int argc,char** argv)
   // Initialize G4 kernel
   //
   runManager->Initialize();
-    
+  
   // Get the pointer to the User Interface manager
   //
   G4UImanager* UImanager = G4UImanager::GetUIpointer(); 
    
-  //if (argc==1)   // Define UI session for interactive mode
-    //{
-#ifdef G4UI_USE
-      G4UIExecutive * ui = new G4UIExecutive(argc,argv);
-#ifdef G4VIS_USE
-            // UImanager->ApplyCommand("/control/execute vis.mac");     
-		UImanager->ApplyCommand("/control/execute gps.mac");    
-#endif
-      ui->SessionStart();
-      delete ui;
-#endif
-    //}
-  //else         // Batch mode
-    //{
-      //G4String command = "/control/execute ";
-      //G4String fileName = argv[1];
-      //UImanager->ApplyCommand(command+fileName);
-    //}
+  #ifdef G4UI_USE
+    G4UIExecutive * ui = new G4UIExecutive(argc,argv);
+  #ifdef G4VIS_USE
+    UImanager->ApplyCommand("/control/execute gps.mac");    
+  #endif
+    ui->SessionStart();
+    delete ui;
+  #endif
    
   // Job termination
   // Free the store: user actions, physics_list and detector_description are
   //                 owned and deleted by the run manager, so they should not
   //                 be deleted in the main() program !
-/*
-#ifdef G4VIS_USE
-  delete visManager;
-#endif
+  
   delete runManager;
   delete verbosity;
-  */
 
-  string ciao = argv[1];
-  string filename = ciao + ".root";
-  TFile* outfile = new TFile(filename.c_str(),"RECREATE");
-  outfile->cd();
-  G4cout<<"Writing tree to file "<< filename << " ..." << G4endl;
-  mytree->GetTree()->Write();
-  outfile->Write();
-  outfile->Close();
+  string filename = name + ".root";
+  TFile* outfile  = new TFile(filename.c_str(),"RECREATE");
+  outfile -> cd();
+  G4cout << "Writing tree to file " << filename << " ..." << G4endl;
+  mytree  -> GetTree() -> Write();
+  outfile -> Write();
+  outfile -> Close();
 
   return 0;
 }

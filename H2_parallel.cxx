@@ -25,14 +25,21 @@ using boost::thread;
 
 
 
-void myThread(int number, string name) 
+void myThread(int number, string name, Bool_t energy_data, Bool_t init_data, Bool_t pos_fiber) 
 {	
 	ostringstream temp1;
 	temp1 << number;
 	string command;	
-
+	
+	ostringstream temp2;
+	ostringstream temp3;
+	ostringstream temp4;
+	temp2 << energy_data;
+	temp3 << init_data;
+	temp4 << pos_fiber;
+	
 	string rootFile = name + temp1.str();
-	command = "$G4WORKDIR/bin/Linux-g++/H2_sim " + rootFile;
+	command = "$G4WORKDIR/bin/Linux-g++/H2_sim " + rootFile + temp2 + temp3 + temp4;
 	cout << command << endl;
 	system(command.c_str());
 };
@@ -41,19 +48,25 @@ void myThread(int number, string name)
 
 int main(int argc, char** argv) 
 {
-    if (argc < 3)
-    {
-      cout << "Command: ./H2_parallel [n_cpu] [output_name]" << endl;
-      return 1;
-    }
+
+    int n_cpu          = atoi(argv[1]);
+    int n_processi     = atoi(argv[2])
+    string filename    = argv[3];
+    Bool_t energy_data = 1;
+    Bool_t init_data   = 1;
+    Bool_t pos_fiber   = 0;
     
-	int n_cpu = atoi(argv[1]);
-    string filename = argv[2];
+    if (argc == 7)
+    {
+      energy_data = atoi(argv[4]);
+      init_data   = atoi(argv[5]);
+      pos_fiber   = atoi(argv[6]);
+    }
     	
-	boost::threadpool::thread_pool<> tpool(7);
-	for(int j=0; j<n_cpu; j++)
+	boost::threadpool::thread_pool<> tpool(n_cpu);
+	for(int j=0; j<n_processi; j++)
 	{
-	  tpool.schedule(boost::bind(myThread, j, filename));
+	  tpool.schedule(boost::bind(myThread, j, filename, energy_data, init_data, pos_fiber));
 	}
 	tpool.wait();
 	cout << "Done" << endl;
