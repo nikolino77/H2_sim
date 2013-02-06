@@ -31,8 +31,8 @@
 
 /gps/pos/type Plane
 /gps/pos/shape Square
-/gps/pos/halfx 1.5 cm
-/gps/pos/halfy 1.5 cm
+/gps/pos/halfx 1 cm
+/gps/pos/halfy 1 cm
 
 /gps/ang/type beam2d
 /gps/ang/sigma_x 0. mrad
@@ -46,6 +46,6 @@
 
 
 
-/run/beamOn 100
+/run/beamOn 10000
 
 
