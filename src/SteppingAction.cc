@@ -40,7 +40,7 @@ void SteppingAction::UserSteppingAction(const G4Step * theStep)
   G4StepPoint		*thePostPoint	= theStep      -> GetPostStepPoint();
   //G4VPhysicalVolume	*thePostPV	= thePostPoint -> GetPhysicalVolume();
 
-  Float_t energy = theStep->GetTotalEnergyDeposit();
+  Float_t energy = theStep->GetTotalEnergyDeposit()/GeV;
   
   if (energy > 0)
   {	 
@@ -53,19 +53,24 @@ void SteppingAction::UserSteppingAction(const G4Step * theStep)
       CreateTree::Instance() -> Energy_deposited.push_back(energy);
     }	
     
-    for (int iF = 0; iF < 9; iF ++) 
+    if( CreateTree::Instance() -> Energy_fiber())
     {
-      if (atoi(thePrePV->GetName()) == iF)
+
+      for (int iF = 0; iF < 9; iF++) 
       {
-	CreateTree::Instance()->Total_energy[iF] += energy;
-	break;
-      }	
+        if (atoi(thePrePV->GetName()) == iF+1)
+        {
+	  CreateTree::Instance()->Total_energy[iF] += energy;
+	  break;
+        }	
+      }
     }
     
     if (thePrePV->GetName() == "Box_abs_phys")
     {
       CreateTree::Instance()->Total_energy_absorber += energy;   
     }
+    
     CreateTree::Instance()->Total_energy_world += energy;       
   }  
 

@@ -160,7 +160,7 @@ G4VPhysicalVolume* ExN06DetectorConstruction::Construct()
     sprintf (name, "Hole_%d" , iF);
     Brass_hole_phys[iF] = new G4PVPlacement(0, G4ThreeVector(x[iF],y[iF],0), Brass_hole_log, name, Box_abs_log, false, 0);
     
-    sprintf (name, "%d" , iF);
+    sprintf (name, "%d" , iF+1);
     Crystal_phys[iF] = new G4PVPlacement(0, G4ThreeVector(x[iF],y[iF],0), Crystal_fiber_log, name, Box_abs_log, false, 0);     
   }
     
