@@ -1,4 +1,4 @@
-name := H2_sim
+name := H2_cer
 G4TARGET := $(name)
 G4EXLIB := true
 

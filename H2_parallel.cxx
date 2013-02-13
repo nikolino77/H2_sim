@@ -39,7 +39,7 @@ void myThread(int number, string name, Bool_t energy_data, Bool_t init_data, Boo
 	temp4 << pos_fiber;
 	
 	string rootFile = name + temp1.str();
-	command = "$G4WORKDIR/bin/Linux-g++/H2_sim " + rootFile + temp2.str() + temp3.str() + temp4.str();
+	command = "$G4WORKDIR/bin/Linux-g++/H2_cer " + rootFile + temp2.str() + temp3.str() + temp4.str();
 	cout << command << endl;
 	system(command.c_str());
 };
