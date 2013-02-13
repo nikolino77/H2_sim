@@ -14,7 +14,6 @@
 #include "CreateTree.hh"
 #include "ExN06PrimaryGeneratorAction.hh"
 
-
 #include <vector>
 
 #include "TFile.h"
@@ -61,7 +60,12 @@ void EventAction::BeginOfEventAction(const G4Event* evt)
 }
 
 void EventAction::EndOfEventAction(const G4Event* evt)
-{
+{ 
   CreateTree::Instance()->Fill();
+  //if (CreateTree::Instance()-> Total_energy[0] > 8)
+  //{
+      
+  //}
+  
 }
 

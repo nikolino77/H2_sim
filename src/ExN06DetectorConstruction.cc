@@ -104,6 +104,26 @@ G4VPhysicalVolume* ExN06DetectorConstruction::Construct()
   LuAG->AddElement(Lu,3);
   LuAG->AddElement(Al,12);
   LuAG->AddElement(O,5);
+  
+  //  2 bands at 290nm (4.28eV) and 350nm (3.54eV) about 50% of the light in each.
+  const G4int NUMENTRIES_1 = 8;
+  G4double FAST_Energy[NUMENTRIES_1]    = {1.0 * eV, 3.4 * eV, 3.5 * eV, 3.60 * eV, 3.90 * eV, 3.91 * eV, 4.07 * eV, 4.08 * eV};
+  G4double FAST_COMPONENT[NUMENTRIES_1] = {0.00  , 0.00,  1.00,  0.0,    0.0,    1.0,    0.0,    0.0    };
+
+  const G4int NUMENTRIES_2 = 3;
+  G4double RIND_Energy[NUMENTRIES_2]    = { 1.0 * eV, 1.84 * eV, 4.08 * eV };
+  G4double RIND_INDEX[NUMENTRIES_2]     = { 1.82, 1.82, 1.82 };
+  G4double ABS_Energy[NUMENTRIES_2]     = { 1.0 * eV, 1.84 * eV, 4.08 * eV };
+  G4double ABS_LENGTH[NUMENTRIES_2]     = { 138.*mm, 138.*mm, 138.*mm };
+  
+  G4MaterialPropertiesTable *mt = new G4MaterialPropertiesTable();
+  mt->AddProperty ("RINDEX",        RIND_Energy, RIND_INDEX,     NUMENTRIES_2);
+  mt->AddProperty ("ABSLENGTH",     ABS_Energy,  ABS_LENGTH,     NUMENTRIES_2);
+  mt->AddConstProperty ("FASTSCINTILLATIONRISETIME", 0.5 * ns);
+  mt->AddConstProperty ("FASTTIMECONSTANT", 20.*ns);
+  mt->AddConstProperty ("SCINTILLATIONYIELD", 0 / MeV);
+  
+  LuAG->SetMaterialPropertiesTable (mt);
 
 //
 //	------------- Volumes --------------
@@ -147,7 +167,7 @@ G4VPhysicalVolume* ExN06DetectorConstruction::Construct()
   G4Tubs* Crystal_fiber = new G4Tubs("Crystal_fiber",0,fiber_radius,0.5*fiber_lenght,startAngle,spanningAngle);
   
   // logical
-  G4LogicalVolume* Box_abs_log = new G4LogicalVolume(Box_abs_solid, Brass, "Box_abs_log", 0,0,0);
+  G4LogicalVolume* Box_abs_log = new G4LogicalVolume(Box_abs_solid,Brass, "Box_abs_log", 0,0,0);
   G4LogicalVolume* Brass_hole_log = new G4LogicalVolume(Brass_hole,Air,"Brass_hole_log",0,0,0);
   G4LogicalVolume* Crystal_fiber_log = new G4LogicalVolume(Crystal_fiber,LuAG,"Crystal_fiber_log",0,0,0);
   

@@ -48,6 +48,9 @@
 
 #include "G4LossTableManager.hh"
 #include "G4EmSaturation.hh"
+
+#include "CreateTree.hh"
+#include <vector>
  
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -144,7 +147,10 @@ void ExN06PhysicsList::ConstructProcess()
   AddTransportation();
   ConstructGeneral();
   ConstructEM();
-  //ConstructOp();
+  if(CreateTree::Instance() -> Optical())
+  {
+    ConstructOp();
+  }
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -258,10 +264,10 @@ void ExN06PhysicsList::ConstructOp()
 //  theScintillationProcess->DumpPhysicsTable();
 //  theRayleighScatteringProcess->DumpPhysicsTable();
 
-  SetVerbose(1);
+  SetVerbose(0);
   
-  theCerenkovProcess->SetMaxNumPhotonsPerStep(20);
-  theCerenkovProcess->SetMaxBetaChangePerStep(10.0);
+  theCerenkovProcess->SetMaxNumPhotonsPerStep(100000);
+  theCerenkovProcess->SetMaxBetaChangePerStep(50.0);
   theCerenkovProcess->SetTrackSecondariesFirst(true);
   
   theScintillationProcess->SetScintillationYieldFactor(1.);
@@ -272,8 +278,8 @@ void ExN06PhysicsList::ConstructOp()
   G4EmSaturation* emSaturation = G4LossTableManager::Instance()->EmSaturation();
   theScintillationProcess->AddSaturation(emSaturation);
 
-  G4OpticalSurfaceModel themodel = unified;
-  theBoundaryProcess->SetModel(themodel);
+  //G4OpticalSurfaceModel themodel = unified;
+  //theBoundaryProcess->SetModel(themodel);
 
   theParticleIterator->reset();
   while( (*theParticleIterator)() ){

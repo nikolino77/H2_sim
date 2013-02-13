@@ -5,16 +5,17 @@ CreateTree* CreateTree::fInstance = NULL;
 
 using namespace std;
 
-CreateTree::CreateTree(TString name, Bool_t energy_fiber, Bool_t init_data, Bool_t pos_fiber)
+CreateTree::CreateTree(TString name, Bool_t energy_fiber, Bool_t init_data, Bool_t pos_fiber, Bool_t optical)
 {
 	if(fInstance) 
 	{
     	  return;
   	}
   	
-  	this -> ENERGY_FIBER = energy_fiber;
-	this -> INIT_DATA    = init_data;
-	this -> POS_FIBER    = pos_fiber;
+  	this -> ENERGY_FIBER 	= energy_fiber;
+	this -> INIT_DATA    	= init_data;
+	this -> POS_FIBER    	= pos_fiber;
+	this -> OPTICAL		= optical;
 	
   	this -> fInstance = this;
   	this -> fname     = name;
@@ -22,6 +23,14 @@ CreateTree::CreateTree(TString name, Bool_t energy_fiber, Bool_t init_data, Bool
 
   	this->GetTree()->Branch("Event",&this->Event,"Event/I");
 
+	if( this -> OPTICAL )
+	{
+	  this->GetTree()->Branch("Num_phot_cer",&this->Num_phot_cer,"Num_phot_cer[9]/I");
+	  if( !this -> ENERGY_FIBER )
+	  {
+            this->GetTree()->Branch("Total_energy",&this->Total_energy,"Total_energy[9]/F");
+	  } 
+	}
 	
 	if( this -> INIT_DATA )
 	{
@@ -74,6 +83,18 @@ void CreateTree::Clear()
 	
 	Total_energy_absorber	= 0;
 	Total_energy_world	= 0;
+	
+	if( this -> OPTICAL )
+	{
+	  for (int iF = 0; iF < 9; iF++) 
+	  {
+	    Num_phot_cer[iF] = 0;
+	    if(!this -> ENERGY_FIBER)
+	    {
+	      Total_energy[iF] = 0;	  
+	    }  
+	  }	  
+	}
 	
 	if( this -> INIT_DATA )
 	{

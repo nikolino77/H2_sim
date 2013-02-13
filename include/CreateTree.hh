@@ -18,10 +18,11 @@ class CreateTree
   Bool_t	       ENERGY_FIBER;
   Bool_t	       INIT_DATA; 
   Bool_t	       POS_FIBER;
-  
+  Bool_t	       OPTICAL;
+
   public:
 
-  CreateTree(TString name, Bool_t energy_fiber, Bool_t init_data, Bool_t pos_fiber);
+  CreateTree(TString name, Bool_t energy_fiber, Bool_t init_data, Bool_t pos_fiber, Bool_t optical);
   ~CreateTree();
 
   TTree*              GetTree() const { return ftree; };
@@ -35,9 +36,10 @@ class CreateTree
   Bool_t	       Energy_fiber() const { return this -> ENERGY_FIBER; };
   Bool_t	       Init_data()    const { return this -> INIT_DATA;    };
   Bool_t	       Pos_fiber()    const { return this -> POS_FIBER;    };
+  Bool_t	       Optical()      const { return this -> OPTICAL;	     };
   
   Int_t               Event;
-
+  
   Float_t InitialPositionX;
   Float_t InitialPositionY;
   Float_t InitialPositionZ;
@@ -52,6 +54,7 @@ class CreateTree
   vector<Float_t> depositionZ;
   
   Float_t Total_energy[9];
+  Int_t   Num_phot_cer[9];
 
   Float_t Total_energy_absorber;
   Float_t Total_energy_world;

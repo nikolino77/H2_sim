@@ -34,45 +34,49 @@ SteppingAction::~SteppingAction()
 
 void SteppingAction::UserSteppingAction(const G4Step * theStep)
 {
+  if(theStep->GetTrack()->GetDefinition() == G4OpticalPhoton::OpticalPhotonDefinition()) 
+  { 
+    theStep->GetTrack()->SetTrackStatus(fKillTrackAndSecondaries);
+  }
+  else
+  {
+    G4StepPoint		*thePrePoint	= theStep      -> GetPreStepPoint();
+    G4VPhysicalVolume	*thePrePV	= thePrePoint  -> GetPhysicalVolume();
+    G4StepPoint		*thePostPoint	= theStep      -> GetPostStepPoint();
+    //G4VPhysicalVolume	*thePostPV	= thePostPoint -> GetPhysicalVolume();
   
-  G4StepPoint		*thePrePoint	= theStep      -> GetPreStepPoint();
-  G4VPhysicalVolume	*thePrePV	= thePrePoint  -> GetPhysicalVolume();
-  G4StepPoint		*thePostPoint	= theStep      -> GetPostStepPoint();
-  //G4VPhysicalVolume	*thePostPV	= thePostPoint -> GetPhysicalVolume();
-
-  Float_t energy = theStep->GetTotalEnergyDeposit()/GeV;
+    Float_t energy = theStep->GetTotalEnergyDeposit()/GeV;
   
-  if (energy > 0)
-  {	 
-    if(CreateTree::Instance() -> Pos_fiber())
-    {
-      G4ThreeVector pos = thePostPoint -> GetPosition();	
-      CreateTree::Instance() -> depositionX.push_back(pos[0]);		
-      CreateTree::Instance() -> depositionY.push_back(pos[1]);
-      CreateTree::Instance() -> depositionZ.push_back(pos[2]);
-      CreateTree::Instance() -> Energy_deposited.push_back(energy);
-    }	
-    
-    if( CreateTree::Instance() -> Energy_fiber())
-    {
-
-      for (int iF = 0; iF < 9; iF++) 
+    if (energy > 0)
+    {	
+      if(CreateTree::Instance() -> Pos_fiber())
       {
-        if (atoi(thePrePV->GetName()) == iF+1)
+        G4ThreeVector pos = thePostPoint -> GetPosition();	
+        CreateTree::Instance() -> depositionX.push_back(pos[0]);		
+        CreateTree::Instance() -> depositionY.push_back(pos[1]);
+        CreateTree::Instance() -> depositionZ.push_back(pos[2]);
+        CreateTree::Instance() -> Energy_deposited.push_back(energy);
+      }	
+
+      if( CreateTree::Instance() -> Energy_fiber())
+      {
+        for (int iF = 0; iF < 9; iF++) 
         {
-	  CreateTree::Instance()->Total_energy[iF] += energy;
-	  break;
-        }	
+          if (atoi(thePrePV->GetName()) == iF+1)
+          {
+	    CreateTree::Instance()->Total_energy[iF] += energy;
+	    break;
+          }	
+        }
       }
-    }
     
-    if (thePrePV->GetName() == "Box_abs_phys")
-    {
-      CreateTree::Instance()->Total_energy_absorber += energy;   
-    }
-    
-    CreateTree::Instance()->Total_energy_world += energy;       
-  }  
+      if (thePrePV->GetName() == "Box_abs_phys")
+      {
+        CreateTree::Instance()->Total_energy_absorber += energy;   
+      }
+   
+      CreateTree::Instance()->Total_energy_world += energy;       
+    }  
+  }
 
 }
-

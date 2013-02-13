@@ -103,15 +103,17 @@ int main(int argc,char** argv)
   Bool_t energy_data 	= 1;
   Bool_t init_data 	= 1;
   Bool_t pos_fiber 	= 0;
+  Bool_t optical 	= 0;
   
-  if(argc == 5)
+  if(argc == 6)
   {
     energy_data = atoi(argv[2]);
     init_data   = atoi(argv[3]);
     pos_fiber   = atoi(argv[4]);
+    optical     = atoi(argv[5]);
   }
     
-  CreateTree* mytree = new CreateTree("H2_sim", energy_data, init_data, pos_fiber);
+  CreateTree* mytree = new CreateTree("H2_sim", energy_data, init_data, pos_fiber, optical);
 
   // User Verbose output class
   //

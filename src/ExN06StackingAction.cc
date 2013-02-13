@@ -35,6 +35,18 @@
 #include "G4ParticleTypes.hh"
 #include "G4Track.hh"
 #include "G4ios.hh"
+#include "G4UnitsTable.hh"
+#include "G4VProcess.hh"
+
+#include <iostream>
+#include <fstream>
+#include "CreateTree.hh"
+#include "ExN06DetectorConstruction.hh"
+#include <vector>
+
+#include "TFile.h"
+#include "TTree.h"
+#include "TString.h"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -52,7 +64,26 @@ ExN06StackingAction::~ExN06StackingAction()
 G4ClassificationOfNewTrack
 ExN06StackingAction::ClassifyNewTrack(const G4Track * aTrack)
 {
-  return fUrgent;
+  
+  if(CreateTree::Instance() -> Optical())
+  {
+    if(aTrack->GetDefinition() == G4OpticalPhoton::OpticalPhotonDefinition()) 
+    {  
+      if(aTrack->GetCreatorProcess()->GetProcessName() == "Cerenkov")
+      {
+	for (int iF = 0; iF < 9; iF++) 
+        {
+          if (atoi(aTrack -> GetVolume() -> GetName()) == iF+1)
+          {
+	      CreateTree::Instance()->Num_phot_cer[iF] += 1;
+	      break;
+	   }
+         }	
+       }
+     }
+   } 
+  
+  return fUrgent; 
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
