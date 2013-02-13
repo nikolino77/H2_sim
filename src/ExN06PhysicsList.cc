@@ -290,11 +290,11 @@ void ExN06PhysicsList::ConstructOp()
       pmanager->AddProcess(theCerenkovProcess);
       pmanager->SetProcessOrdering(theCerenkovProcess,idxPostStep);
     }
-    if (theScintillationProcess->IsApplicable(*particle)) {
-      pmanager->AddProcess(theScintillationProcess);
-      pmanager->SetProcessOrderingToLast(theScintillationProcess, idxAtRest);
-      pmanager->SetProcessOrderingToLast(theScintillationProcess, idxPostStep);
-    }
+    //if (theScintillationProcess->IsApplicable(*particle)) {
+      //pmanager->AddProcess(theScintillationProcess);
+      //pmanager->SetProcessOrderingToLast(theScintillationProcess, idxAtRest);
+      //pmanager->SetProcessOrderingToLast(theScintillationProcess, idxPostStep);
+    //}
     if (particleName == "opticalphoton") {
       G4cout << " AddDiscreteProcess to OpticalPhoton " << G4endl;
       pmanager->AddDiscreteProcess(theAbsorptionProcess);
