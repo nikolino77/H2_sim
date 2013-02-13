@@ -254,7 +254,7 @@ void ExN06PhysicsList::ConstructEM()
 void ExN06PhysicsList::ConstructOp()
 {
   theCerenkovProcess           = new G4Cerenkov("Cerenkov");
-  theScintillationProcess      = new G4Scintillation("Scintillation");
+  //theScintillationProcess      = new G4Scintillation("Scintillation");
   theAbsorptionProcess         = new G4OpAbsorption();
   theRayleighScatteringProcess = new G4OpRayleigh();
   theMieHGScatteringProcess    = new G4OpMieHG();
@@ -266,17 +266,17 @@ void ExN06PhysicsList::ConstructOp()
 
   SetVerbose(0);
   
-  theCerenkovProcess->SetMaxNumPhotonsPerStep(100000);
-  theCerenkovProcess->SetMaxBetaChangePerStep(50.0);
+  //theCerenkovProcess->SetMaxNumPhotonsPerStep(100000);
+  //theCerenkovProcess->SetMaxBetaChangePerStep(50.0);
   theCerenkovProcess->SetTrackSecondariesFirst(true);
   
-  theScintillationProcess->SetScintillationYieldFactor(1.);
-  theScintillationProcess->SetTrackSecondariesFirst(true);
+  //theScintillationProcess->SetScintillationYieldFactor(1.);
+  //theScintillationProcess->SetTrackSecondariesFirst(true);
 
   // Use Birks Correction in the Scintillation process
 
-  G4EmSaturation* emSaturation = G4LossTableManager::Instance()->EmSaturation();
-  theScintillationProcess->AddSaturation(emSaturation);
+  //G4EmSaturation* emSaturation = G4LossTableManager::Instance()->EmSaturation();
+  //theScintillationProcess->AddSaturation(emSaturation);
 
   //G4OpticalSurfaceModel themodel = unified;
   //theBoundaryProcess->SetModel(themodel);
@@ -310,7 +310,7 @@ void ExN06PhysicsList::ConstructOp()
 void ExN06PhysicsList::SetVerbose(G4int verbose)
 {
   theCerenkovProcess->SetVerboseLevel(verbose);
-  theScintillationProcess->SetVerboseLevel(verbose);
+  //theScintillationProcess->SetVerboseLevel(verbose);
   theAbsorptionProcess->SetVerboseLevel(verbose);
   theRayleighScatteringProcess->SetVerboseLevel(verbose);
   theMieHGScatteringProcess->SetVerboseLevel(verbose);

@@ -110,11 +110,11 @@ G4VPhysicalVolume* ExN06DetectorConstruction::Construct()
   G4double FAST_Energy[NUMENTRIES_1]    = {1.0 * eV, 3.4 * eV, 3.5 * eV, 3.60 * eV, 3.90 * eV, 3.91 * eV, 4.07 * eV, 4.08 * eV};
   G4double FAST_COMPONENT[NUMENTRIES_1] = {0.00  , 0.00,  1.00,  0.0,    0.0,    1.0,    0.0,    0.0    };
 
-  const G4int NUMENTRIES_2 = 3;
-  G4double RIND_Energy[NUMENTRIES_2]    = { 1.0 * eV, 1.84 * eV, 4.08 * eV };
-  G4double RIND_INDEX[NUMENTRIES_2]     = { 1.82, 1.82, 1.82 };
-  G4double ABS_Energy[NUMENTRIES_2]     = { 1.0 * eV, 1.84 * eV, 4.08 * eV };
-  G4double ABS_LENGTH[NUMENTRIES_2]     = { 138.*mm, 138.*mm, 138.*mm };
+  const G4int NUMENTRIES_2 = 2;
+  G4double RIND_Energy[NUMENTRIES_2]    = { 2. * eV, 6. * eV };
+  G4double RIND_INDEX[NUMENTRIES_2]     = { 1.82, 1.82 };
+  G4double ABS_Energy[NUMENTRIES_2]     = {  2. * eV, 6. * eV };
+  G4double ABS_LENGTH[NUMENTRIES_2]     = { 138.*mm, 138.*mm};
   
   G4MaterialPropertiesTable *mt = new G4MaterialPropertiesTable();
   mt->AddProperty ("RINDEX",        RIND_Energy, RIND_INDEX,     NUMENTRIES_2);
