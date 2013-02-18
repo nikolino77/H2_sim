@@ -25,7 +25,7 @@ using boost::thread;
 
 
 
-void myThread(int number, string name, Bool_t energy_data, Bool_t init_data, Bool_t pos_fiber) 
+void myThread(int number, string name, Bool_t energy_data, Bool_t init_data, Bool_t pos_fiber, Bool_t optical) 
 {	
 	ostringstream temp1;
 	temp1 << number;
@@ -34,12 +34,14 @@ void myThread(int number, string name, Bool_t energy_data, Bool_t init_data, Boo
 	ostringstream temp2;
 	ostringstream temp3;
 	ostringstream temp4;
+	ostringstream temp5;
 	temp2 << energy_data;
 	temp3 << init_data;
 	temp4 << pos_fiber;
+        temp5 << optical;
 	
 	string rootFile = name + temp1.str();
-	command = "$G4WORKDIR/bin/Linux-g++/H2_cer " + rootFile + temp2.str() + temp3.str() + temp4.str();
+	command = "$G4WORKDIR/bin/Linux-g++/H2_cer " + rootFile + temp2.str() + temp3.str() + temp4.str() + temp5.str();
 	cout << command << endl;
 	system(command.c_str());
 };
@@ -55,18 +57,20 @@ int main(int argc, char** argv)
     Bool_t energy_data = 1;
     Bool_t init_data   = 1;
     Bool_t pos_fiber   = 0;
-    
-    if (argc == 7)
+    Bool_t optical     = 0;    
+
+    if (argc == 8)
     {
       energy_data = atoi(argv[4]);
       init_data   = atoi(argv[5]);
       pos_fiber   = atoi(argv[6]);
+      optical	  = atoi(argv[7]);
     }
     	
 	boost::threadpool::thread_pool<> tpool(n_cpu);
 	for(int j=0; j<n_processi; j++)
 	{
-	  tpool.schedule(boost::bind(myThread, j, filename, energy_data, init_data, pos_fiber));
+	  tpool.schedule(boost::bind(myThread, j, filename, energy_data, init_data, pos_fiber, optical));
 	}
 	tpool.wait();
 	cout << "Done" << endl;
