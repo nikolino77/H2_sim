@@ -41,7 +41,7 @@ void myThread(int number, string name, Bool_t energy_data, Bool_t init_data, Boo
         temp5 << optical;
 	
 	string rootFile = name + temp1.str();
-	command = "$G4WORKDIR/bin/Linux-g++/H2_cer " + rootFile + temp2.str() + temp3.str() + temp4.str() + temp5.str();
+	command = "$G4WORKDIR/bin/Linux-g++/H2_cer " + rootFile + " " + temp2.str() + " " + temp3.str() + " "  + temp4.str() + " "  + temp5.str();
 	cout << command << endl;
 	system(command.c_str());
 };
