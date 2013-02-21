@@ -23,77 +23,54 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: ExN06StackingAction.cc,v 1.6 2010-01-13 15:48:18 gcosmo Exp $
+//
+// $Id: ExN06DetectorConstruction.hh,v 1.5 2006-06-29 17:53:55 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-#include "ExN06StackingAction.hh"
+#ifndef DetectorConstruction_h
+#define DetectorConstruction_h 1
 
-#include "G4ParticleDefinition.hh"
-#include "G4ParticleTypes.hh"
-#include "G4Track.hh"
-#include "G4ios.hh"
-#include "G4UnitsTable.hh"
-#include "G4VProcess.hh"
-
-#include <iostream>
-#include <fstream>
-#include "CreateTree.hh"
-#include "DetectorConstruction.hh"
-#include <vector>
-
-#include "TFile.h"
-#include "TTree.h"
-#include "TString.h"
+#include "globals.hh"
+#include "G4VUserDetectorConstruction.hh"
+#include "G4Material.hh"
+#include "G4MaterialTable.hh"
+#include "G4Element.hh"
+#include "G4ElementTable.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-ExN06StackingAction::ExN06StackingAction()
-: gammaCounter(0)
-{}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
-ExN06StackingAction::~ExN06StackingAction()
-{}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
-G4ClassificationOfNewTrack
-ExN06StackingAction::ClassifyNewTrack(const G4Track * aTrack)
+class DetectorConstruction : public G4VUserDetectorConstruction
 {
-  
-  if(CreateTree::Instance() -> Optical())
-  {
-    if(aTrack->GetDefinition() == G4OpticalPhoton::OpticalPhotonDefinition()) 
-    {  
-      if(aTrack->GetCreatorProcess()->GetProcessName() == "Cerenkov")
-      {
-	for (int iF = 0; iF < 9; iF++) 
-        {
-          if (atoi(aTrack -> GetVolume() -> GetName()) == iF+1)
-          {
-	      CreateTree::Instance()->Num_phot_cer[iF] += 1;
-	      break;
-	   }
-         }	
-       }
-     }
-   } 
-  
-  return fUrgent; 
-}
+  public:
+    DetectorConstruction();
+   ~DetectorConstruction();
+
+  public:
+    G4VPhysicalVolume* Construct();
+
+  private:
+    G4double expHall_x;
+    G4double expHall_y;
+    G4double expHall_z;
+
+    G4double absorber_x;
+    G4double absorber_y;
+    G4double absorber_z;
+    
+    G4double fiber_lenght;
+    G4double fiber_radius;
+    G4double brass_hole_radius;
+    G4double startAngle;
+    G4double spanningAngle;
+    
+    G4VPhysicalVolume* Brass_hole_phys[9];
+    G4VPhysicalVolume* Crystal_phys[9];
+		
+};
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-void ExN06StackingAction::NewStage()
-{}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
-void ExN06StackingAction::PrepareNewEvent()
-{}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+#endif /*ExN06DetectorConstruction_h*/

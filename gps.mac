@@ -3,6 +3,12 @@
 
 #
 #
+/control/verbose 2
+/run/verbose 1
+/testem/phys/addPhysics  emstandard_opt1
+
+/run/initialize
+
 /gps/energy 80 GeV
 /gps/particle e-
 #/gps/particle gamma
@@ -42,6 +48,6 @@
 /gps/pos/centre 0.0 0.0 0.2 m
 
 
-/run/beamOn 100
+/run/beamOn 20
 
 

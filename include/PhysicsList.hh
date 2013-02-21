@@ -23,77 +23,58 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: ExN06StackingAction.cc,v 1.6 2010-01-13 15:48:18 gcosmo Exp $
+//
+// $Id: PhysicsList.hh,v 1.8 2006-06-29 16:49:52 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
+//
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+//
+// 14.10.02 (V.Ivanchenko) provide modular list on base of old PhysicsList
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-#include "ExN06StackingAction.hh"
+#ifndef PhysicsList_h
+#define PhysicsList_h 1
 
-#include "G4ParticleDefinition.hh"
-#include "G4ParticleTypes.hh"
-#include "G4Track.hh"
-#include "G4ios.hh"
-#include "G4UnitsTable.hh"
-#include "G4VProcess.hh"
+#include "G4VModularPhysicsList.hh"
+#include "globals.hh"
 
-#include <iostream>
-#include <fstream>
-#include "CreateTree.hh"
-#include "DetectorConstruction.hh"
-#include <vector>
-
-#include "TFile.h"
-#include "TTree.h"
-#include "TString.h"
+class PhysicsListMessenger;
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-ExN06StackingAction::ExN06StackingAction()
-: gammaCounter(0)
-{}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
-ExN06StackingAction::~ExN06StackingAction()
-{}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
-G4ClassificationOfNewTrack
-ExN06StackingAction::ClassifyNewTrack(const G4Track * aTrack)
+class PhysicsList: public G4VModularPhysicsList
 {
-  
-  if(CreateTree::Instance() -> Optical())
-  {
-    if(aTrack->GetDefinition() == G4OpticalPhoton::OpticalPhotonDefinition()) 
-    {  
-      if(aTrack->GetCreatorProcess()->GetProcessName() == "Cerenkov")
-      {
-	for (int iF = 0; iF < 9; iF++) 
-        {
-          if (atoi(aTrack -> GetVolume() -> GetName()) == iF+1)
-          {
-	      CreateTree::Instance()->Num_phot_cer[iF] += 1;
-	      break;
-	   }
-         }	
-       }
-     }
-   } 
-  
-  return fUrgent; 
-}
+  public:
+    PhysicsList();
+   ~PhysicsList();
+
+    void ConstructParticle();
+    
+    void SetCuts();
+    void SetCutForGamma(G4double);
+    void SetCutForElectron(G4double);
+    void SetCutForPositron(G4double);        
+        
+    void AddPhysicsList(const G4String& name);
+    void ConstructProcess();
+    
+    void AddDecay();
+    void AddStepMax();       
+
+  private:
+    G4double cutForGamma;
+    G4double cutForElectron;
+    G4double cutForPositron;
+       
+    G4String                             emName;
+    G4VPhysicsConstructor*               emPhysicsList;    
+    
+    PhysicsListMessenger* pMessenger;
+};
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-void ExN06StackingAction::NewStage()
-{}
+#endif
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
-void ExN06StackingAction::PrepareNewEvent()
-{}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

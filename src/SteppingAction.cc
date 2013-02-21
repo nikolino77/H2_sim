@@ -17,7 +17,7 @@
 #include <iostream>
 #include <fstream>
 #include "CreateTree.hh"
-#include "ExN06DetectorConstruction.hh"
+#include "DetectorConstruction.hh"
 #include <vector>
 
 #include "TFile.h"

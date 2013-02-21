@@ -23,77 +23,42 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: ExN06StackingAction.cc,v 1.6 2010-01-13 15:48:18 gcosmo Exp $
+// $Id: StepMaxMessenger.cc,v 1.2 2006-06-29 16:50:54 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-#include "ExN06StackingAction.hh"
+#include "StepMaxMessenger.hh"
 
-#include "G4ParticleDefinition.hh"
-#include "G4ParticleTypes.hh"
-#include "G4Track.hh"
-#include "G4ios.hh"
-#include "G4UnitsTable.hh"
-#include "G4VProcess.hh"
-
-#include <iostream>
-#include <fstream>
-#include "CreateTree.hh"
-#include "DetectorConstruction.hh"
-#include <vector>
-
-#include "TFile.h"
-#include "TTree.h"
-#include "TString.h"
+#include "StepMax.hh"
+#include "G4UIcmdWithADoubleAndUnit.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-ExN06StackingAction::ExN06StackingAction()
-: gammaCounter(0)
-{}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
-ExN06StackingAction::~ExN06StackingAction()
-{}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
-G4ClassificationOfNewTrack
-ExN06StackingAction::ClassifyNewTrack(const G4Track * aTrack)
-{
-  
-  if(CreateTree::Instance() -> Optical())
-  {
-    if(aTrack->GetDefinition() == G4OpticalPhoton::OpticalPhotonDefinition()) 
-    {  
-      if(aTrack->GetCreatorProcess()->GetProcessName() == "Cerenkov")
-      {
-	for (int iF = 0; iF < 9; iF++) 
-        {
-          if (atoi(aTrack -> GetVolume() -> GetName()) == iF+1)
-          {
-	      CreateTree::Instance()->Num_phot_cer[iF] += 1;
-	      break;
-	   }
-         }	
-       }
-     }
-   } 
-  
-  return fUrgent; 
+StepMaxMessenger::StepMaxMessenger(StepMax* stepM)
+:stepMax(stepM)
+{ 
+  StepMaxCmd = new G4UIcmdWithADoubleAndUnit("/testem/stepMax",this);
+  StepMaxCmd->SetGuidance("Set max allowed step length");
+  StepMaxCmd->SetParameterName("mxStep",false);
+  StepMaxCmd->SetRange("mxStep>0.");
+  StepMaxCmd->SetUnitCategory("Length");
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-void ExN06StackingAction::NewStage()
-{}
+StepMaxMessenger::~StepMaxMessenger()
+{
+  delete StepMaxCmd;
+}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-void ExN06StackingAction::PrepareNewEvent()
-{}
+void StepMaxMessenger::SetNewValue(G4UIcommand* command, G4String newValue)
+{ 
+  if (command == StepMaxCmd)
+    { stepMax->SetMaxStep(StepMaxCmd->GetNewDoubleValue(newValue));}
+}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

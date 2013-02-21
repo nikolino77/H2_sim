@@ -23,77 +23,54 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: ExN06StackingAction.cc,v 1.6 2010-01-13 15:48:18 gcosmo Exp $
+// $Id: StepMax.hh,v 1.2 2006-06-29 16:50:04 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-#include "ExN06StackingAction.hh"
+#ifndef StepMax_h
+#define StepMax_h 1
 
+#include "globals.hh"
+#include "G4VDiscreteProcess.hh"
 #include "G4ParticleDefinition.hh"
-#include "G4ParticleTypes.hh"
-#include "G4Track.hh"
-#include "G4ios.hh"
-#include "G4UnitsTable.hh"
-#include "G4VProcess.hh"
+#include "G4Step.hh"
 
-#include <iostream>
-#include <fstream>
-#include "CreateTree.hh"
-#include "DetectorConstruction.hh"
-#include <vector>
-
-#include "TFile.h"
-#include "TTree.h"
-#include "TString.h"
+class StepMaxMessenger;
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-ExN06StackingAction::ExN06StackingAction()
-: gammaCounter(0)
-{}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
-ExN06StackingAction::~ExN06StackingAction()
-{}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
-G4ClassificationOfNewTrack
-ExN06StackingAction::ClassifyNewTrack(const G4Track * aTrack)
+class StepMax : public G4VDiscreteProcess
 {
-  
-  if(CreateTree::Instance() -> Optical())
-  {
-    if(aTrack->GetDefinition() == G4OpticalPhoton::OpticalPhotonDefinition()) 
-    {  
-      if(aTrack->GetCreatorProcess()->GetProcessName() == "Cerenkov")
-      {
-	for (int iF = 0; iF < 9; iF++) 
-        {
-          if (atoi(aTrack -> GetVolume() -> GetName()) == iF+1)
-          {
-	      CreateTree::Instance()->Num_phot_cer[iF] += 1;
-	      break;
-	   }
-         }	
-       }
-     }
-   } 
-  
-  return fUrgent; 
-}
+  public:
+
+     StepMax(const G4String& processName = "UserMaxStep");
+    ~StepMax();
+
+     G4bool IsApplicable(const G4ParticleDefinition&);
+
+     void SetMaxStep(G4double);
+
+     G4double GetMaxStep() {return MaxChargedStep;};
+
+     G4double PostStepGetPhysicalInteractionLength( const G4Track& track,
+			                       G4double previousStepSize,
+			                       G4ForceCondition* condition);
+
+     G4VParticleChange* PostStepDoIt(const G4Track&, const G4Step&);
+
+     G4double GetMeanFreePath(const G4Track&, G4double,G4ForceCondition*)
+     {return DBL_MAX;};    
+
+  private:
+
+     G4double MaxChargedStep;
+     
+     StepMaxMessenger* pMess;
+};
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-void ExN06StackingAction::NewStage()
-{}
+#endif
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
-void ExN06StackingAction::PrepareNewEvent()
-{}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

@@ -58,9 +58,9 @@
 
 #include "G4ios.hh"
 
-#include "ExN06PhysicsList.hh"
+#include "PhysicsList.hh"
 #include "ExN06PrimaryGeneratorAction.hh"
-#include "ExN06DetectorConstruction.hh"
+#include "DetectorConstruction.hh"
 #include "ExN06RunAction.hh"
 #include "ExN06StackingAction.hh"
 #include "SteppingAction.hh"
@@ -105,7 +105,7 @@ int main(int argc,char** argv)
   Bool_t pos_fiber 	= 0;
   Bool_t optical 	= 0;
   
-  if(argc == 6)
+  if(argc >= 6)
   {
     energy_data = atoi(argv[2]);
     init_data   = atoi(argv[3]);
@@ -126,13 +126,13 @@ int main(int argc,char** argv)
 
   // UserInitialization classes - mandatory
   //
-  G4VUserPhysicsList* physics = new ExN06PhysicsList;
+  G4VUserPhysicsList* physics = new PhysicsList;
   runManager-> SetUserInitialization(physics);
   //
   G4VUserPrimaryGeneratorAction* gen_action = new ExN06PrimaryGeneratorAction;
   runManager->SetUserAction(gen_action);
   //
-  G4VUserDetectorConstruction* detector = new ExN06DetectorConstruction;
+  G4VUserDetectorConstruction* detector = new DetectorConstruction;
   runManager-> SetUserInitialization(detector);
 
   // UserAction classes
@@ -148,24 +148,49 @@ int main(int argc,char** argv)
   //
   SteppingAction* stepping_action = new SteppingAction;
   runManager->SetUserAction(stepping_action);
+
+
+
   
   // Initialize G4 kernel
   //
-  runManager->Initialize();
+  //runManager->Initialize();
   
   // Get the pointer to the User Interface manager
   //
-  G4UImanager* UImanager = G4UImanager::GetUIpointer(); 
+
+  cout << argc << endl;
+  if (argc==7)   // Define UI session for interactive mode
+  {    
+    #ifdef G4VIS_USE
+     G4VisManager* visManager = new G4VisExecutive;
+      visManager->Initialize();
+    #endif
+     
+    // Initialize G4 kernel
+    //
+    runManager->Initialize();
+    
+    G4UImanager* UImanager = G4UImanager::GetUIpointer(); 
+    #ifdef G4UI_USE
+      G4UIExecutive * ui = new G4UIExecutive(argc,argv);
+    #ifdef G4VIS_USE
+      UImanager->ApplyCommand("/control/execute vis.mac");     
+    #endif
+      ui->SessionStart();
+      delete ui;
+    #endif 
    
-  #ifdef G4UI_USE
-    G4UIExecutive * ui = new G4UIExecutive(argc,argv);
-  #ifdef G4VIS_USE
-    UImanager->ApplyCommand("/control/execute gps.mac");    
-  #endif
-    ui->SessionStart();
-    delete ui;
-  #endif
-   
+    #ifdef G4VIS_USE
+      delete visManager;
+    #endif  
+  }
+  else
+  {
+    G4UImanager* UImanager = G4UImanager::GetUIpointer(); 
+    UImanager->ApplyCommand("/control/execute gps.mac");
+  } 
+
   // Job termination
   // Free the store: user actions, physics_list and detector_description are
   //                 owned and deleted by the run manager, so they should not
@@ -173,6 +198,8 @@ int main(int argc,char** argv)
   
   delete runManager;
   delete verbosity;
+
+
 
   string filename = name + ".root";
   TFile* outfile  = new TFile(filename.c_str(),"RECREATE");
