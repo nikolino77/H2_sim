@@ -73,13 +73,11 @@
 # For file-based drivers, use this to create an empty detector view:
 #/vis/viewer/flush
 
-/run/beamOn 10
 /gps/energy 80 GeV
 /gps/particle geantino
 
 # longitudinal beam
 /gps/position 0.0 0.0 -0.2 m
-/gps/direction 0. 0.18 1.
 
 /gps/pos/type Plane
 /gps/pos/shape Square
@@ -87,10 +85,10 @@
 /gps/pos/halfy 1 cm
 
 /gps/ang/type beam2d
-/gps/ang/sigma_x 5. mrad
-/gps/ang/sigma_y 5. mrad
+#/gps/ang/sigma_x 5. mrad
+#/gps/ang/sigma_y 5. mrad
 #/gps/ang/rot1 0. 0. 1.
-/gps/pos/centre 0.0 0.0 0.2 m
+/gps/direction 0. 0.018 1.
 
 
 /run/beamOn 20

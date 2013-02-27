@@ -10,30 +10,10 @@
 /run/initialize
 
 /gps/energy 80 GeV
-/gps/particle e-
-#/gps/particle gamma
+/gps/particle geantino
 
 # longitudinal beam
-/gps/position 0.0 0.0 -0.2 m 
-/gps/direction 0. 0. 1.
-
-#perpendicular beam
-#/gps/position 0. 0.1 0. m
-#/gps/direction 0. 1. 0.
-
-
-# Gauss distribution in angle 
-#/gps/ang/type beam2d
-#/gps/ang/sigma_x 50. mrad
-#/gps/ang/sigma_y 50. mrad
-#/gps/ang/rot1 0. 0. -1.
-
-#/gps/pos/type Beam
-#/gps/pos/shape Circle
-#/gps/pos/sigmar 4 cm
-
-
-#/gps/pos/centre 10.0 0. 0. cm
+/gps/position 0.0 0.0 -0.2 m
 
 /gps/pos/type Plane
 /gps/pos/shape Square
@@ -41,13 +21,10 @@
 /gps/pos/halfy 1 cm
 
 /gps/ang/type beam2d
-/gps/ang/sigma_x 0. mrad
-/gps/ang/sigma_y 0. mrad
+#/gps/ang/sigma_x 5. mrad
+#/gps/ang/sigma_y 5. mrad
 #/gps/ang/rot1 0. 0. 1.
-#/gps/pos/radius 2.2 cm
-/gps/pos/centre 0.0 0.0 0.2 m
+/gps/direction 0. 0.018 1.
 
 
 /run/beamOn 20
-
-
