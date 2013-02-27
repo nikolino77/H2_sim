@@ -101,10 +101,12 @@ int main(int argc,char** argv)
   
   string name = "test";
   
-  if (argc!=1)
+  if (argc > 1)
   {  
-    string name		= argv[1];
+    name = argv[1];
   }
+  
+  cout << name << endl;
   
   Bool_t energy_data 	= 1;
   Bool_t init_data 	= 1;
@@ -165,7 +167,6 @@ int main(int argc,char** argv)
   // Get the pointer to the User Interface manager
   //
 
-  cout << argc << endl;
   if (argc==1)   // Define UI session for interactive mode
   {    
     #ifdef G4VIS_USE
