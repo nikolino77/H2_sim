@@ -99,13 +99,19 @@ int main(int argc,char** argv)
   G4long myseed = CreateSeed();
   CLHEP::HepRandom::setTheSeed(myseed);
   
-  string name		= argv[1];
+  string name = "test";
+  
+  if (argc!=1)
+  {  
+    string name		= argv[1];
+  }
+  
   Bool_t energy_data 	= 1;
   Bool_t init_data 	= 1;
   Bool_t pos_fiber 	= 0;
   Bool_t optical 	= 0;
   
-  if(argc >= 6)
+  if(argc == 6)
   {
     energy_data = atoi(argv[2]);
     init_data   = atoi(argv[3]);
@@ -160,7 +166,7 @@ int main(int argc,char** argv)
   //
 
   cout << argc << endl;
-  if (argc==7)   // Define UI session for interactive mode
+  if (argc==1)   // Define UI session for interactive mode
   {    
     #ifdef G4VIS_USE
      G4VisManager* visManager = new G4VisExecutive;
@@ -200,15 +206,15 @@ int main(int argc,char** argv)
   delete verbosity;
 
 
-
-  string filename = name + ".root";
-  TFile* outfile  = new TFile(filename.c_str(),"RECREATE");
-  outfile -> cd();
-  G4cout << "Writing tree to file " << filename << " ..." << G4endl;
-  mytree  -> GetTree() -> Write();
-  outfile -> Write();
-  outfile -> Close();
-
+    string filename = name + ".root";
+    TFile* outfile  = new TFile(filename.c_str(),"RECREATE");
+    outfile -> cd();
+    G4cout << "Writing tree to file " << filename << " ..." << G4endl;
+    mytree  -> GetTree() -> Write();
+    outfile -> Write();
+    outfile -> Close();
+  
+    
   return 0;
 }
 
